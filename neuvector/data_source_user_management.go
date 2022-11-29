@@ -32,9 +32,9 @@ func dataSourceUserManagement() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"fullname": {
+			"username": {
 				Type:     schema.TypeString,
-				Computed: true,
+				Required: true,
 			},
 			"last_login_at": {
 				Type:     schema.TypeString,
@@ -76,7 +76,7 @@ func dataSourceUserManagement() *schema.Resource {
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"username": {
+			"fullname": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -87,7 +87,7 @@ func dataSourceUserManagement() *schema.Resource {
 func dataSourceUserManagementRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	path := UserManagementPath
+	path := UserManagementPath + "/" + d.Get("username").(string)
 	resp, _, _, err := m.(*Client).SendRequest("GET", path, nil, 200)
 
 	if err != nil {
@@ -105,7 +105,6 @@ func dataSourceUserManagementRead(ctx context.Context, d *schema.ResourceData, m
 	default_password := result["user"].(map[string]interface{})["default_password"]
 	email := result["user"].(map[string]interface{})["email"]
 	fullname := result["user"].(map[string]interface{})["fullname"]
-
 	last_login_at := result["user"].(map[string]interface{})["last_login_at"]
 	last_login_timestamp := result["user"].(map[string]interface{})["last_login_timestamp"]
 	locale := result["user"].(map[string]interface{})["locale"]
@@ -135,7 +134,7 @@ func dataSourceUserManagementRead(ctx context.Context, d *schema.ResourceData, m
 	d.Set("timeout", timeout)
 	d.Set("username", username)
 
-	d.SetId("1")
+	d.SetId(username.(string))
 
 	return diags
 }

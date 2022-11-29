@@ -88,7 +88,7 @@ func Authenticate(c *Client) (value string, respheaders string, respCode int, er
 	authpayload := strings.NewReader(`{
 		"password": {
 			"username": "` + c.username + `",
-			"password": "` + c.username + `"
+			"password": "` + c.password + `"
 		}
 	}`)
 	authclient := &http.Client{}
@@ -163,7 +163,6 @@ func UserManagementPasswordBody(d *schema.ResourceData) UserManagementPasswordPo
 	body.Config.Fullname = d.Get("fullname").(string)
 	body.Config.Password = d.Get("password").(string)
 	body.Config.NewPassword = d.Get("new_password").(string)
-
 	return body
 }
 

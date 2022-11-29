@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-var UserManagementPath = "user/admin"
+var UserManagementPath = "user"
 
 type Client struct {
 	password   string
