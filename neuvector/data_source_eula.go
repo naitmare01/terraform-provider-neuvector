@@ -27,7 +27,7 @@ func dataSourceEula() *schema.Resource {
 func dataSourceEulaRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	path := "eula"
+	path := EulaPath
 	resp, _, _, err := m.(*Client).SendRequest("GET", path, nil, 200)
 
 	if err != nil {
@@ -44,7 +44,7 @@ func dataSourceEulaRead(ctx context.Context, d *schema.ResourceData, m interface
 
 	d.Set("accepted", accepted)
 
-	d.SetId("1")
+	d.SetId(EulaID)
 
 	return diags
 }

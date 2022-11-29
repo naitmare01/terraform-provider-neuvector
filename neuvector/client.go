@@ -187,3 +187,9 @@ func UserManagementUserBody(d *schema.ResourceData) UserManagementUserPost {
 
 	return body
 }
+
+func EulaBody(d *schema.ResourceData) EulaPost {
+	body := EulaPost{}
+	body.Eula.Accepted = d.Get("accepted").(bool)
+	return body
+}

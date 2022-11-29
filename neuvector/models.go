@@ -5,6 +5,8 @@ import (
 )
 
 var UserManagementPath = "user"
+var EulaPath = "eula"
+var EulaID = "0"
 
 type Client struct {
 	password   string
@@ -42,4 +44,10 @@ type UserManagementUserPost struct {
 		Timeout                   int    `json:"timeout,omitempty"`
 		Username                  string `json:"username,omitempty"`
 	} `json:"user,omitempty"`
+}
+
+type EulaPost struct {
+	Eula struct {
+		Accepted bool `json:"accepted,omitempty"`
+	} `json:"eula,omitempty"`
 }
