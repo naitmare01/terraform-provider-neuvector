@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 // NewClient creates common settings
@@ -86,7 +88,7 @@ func Authenticate(c *Client) (value string, respheaders string, respCode int, er
 	authpayload := strings.NewReader(`{
 		"password": {
 			"username": "` + c.username + `",
-			"password": "` + c.username + `"
+			"password": "` + c.password + `"
 		}
 	}`)
 	authclient := &http.Client{}
@@ -154,4 +156,34 @@ func DeleteAuthentication(c *Client) (err error) {
 	c.apitoken = ""
 
 	return
+}
+
+func UserManagementPasswordBody(d *schema.ResourceData) UserManagementPasswordPost {
+	body := UserManagementPasswordPost{}
+	body.Config.Fullname = d.Get("fullname").(string)
+	body.Config.Password = d.Get("password").(string)
+	body.Config.NewPassword = d.Get("new_password").(string)
+	return body
+}
+
+func UserManagementUserBody(d *schema.ResourceData) UserManagementUserPost {
+	body := UserManagementUserPost{}
+	body.User.BlockedForFailedLogin = d.Get("blocked_for_failed_login").(bool)
+	body.User.BlockedForPasswordExpired = d.Get("blocked_for_password_expired").(bool)
+	body.User.DefaultPassword = d.Get("default_password").(bool)
+	body.User.Email = d.Get("email").(string)
+	body.User.Fullname = d.Get("fullname").(string)
+	body.User.LastLoginAt = d.Get("last_login_at").(string)
+	body.User.LastLoginTimestamp = d.Get("last_login_timestamp").(int)
+	body.User.Locale = d.Get("locale").(string)
+	body.User.LoginCount = d.Get("login_count").(int)
+	body.User.ModifyPassword = d.Get("modify_password").(bool)
+	body.User.Password = d.Get("password").(string)
+	body.User.Role = d.Get("role").(string)
+	body.User.RoleDomains = d.Get("role_domains").(string)
+	body.User.Server = d.Get("server").(string)
+	body.User.Timeout = d.Get("timeout").(int)
+	body.User.Username = d.Get("username").(string)
+
+	return body
 }
