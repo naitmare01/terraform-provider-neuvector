@@ -30,9 +30,12 @@ func Provider() *schema.Provider {
 				Default:  false,
 			},
 		},
-		ResourcesMap: map[string]*schema.Resource{},
+		ResourcesMap: map[string]*schema.Resource{
+			//"neuvector_user_management": resourceUserManagement(),
+		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"neuvector_eula": dataSourceEula(),
+			"neuvector_eula":            dataSourceEula(),
+			"neuvector_user_management": dataSourceUserManagement(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
