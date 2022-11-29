@@ -9,7 +9,6 @@ provider "neuvector" {
   username = "admin"
   password = "admin_password"
   url      = "https://127.0.0.1:10443/v1"
-  insecure = true
 }
 ```
 
@@ -18,4 +17,4 @@ provider "neuvector" {
 * **username** - (Required) Admin username.
 * **password** - (Required) Admin password.
 * **url** - (Required) url and port to API.
-* **insecure** - (Required) If the connection is insecure.
+* **insecure** - (Optional) - Default value `false`. Indicate whether or not the connection is insecure.
