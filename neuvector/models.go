@@ -51,3 +51,32 @@ type EulaPost struct {
 		Accepted bool `json:"accepted,omitempty"`
 	} `json:"eula,omitempty"`
 }
+
+type OIDCPost struct {
+	Config struct {
+		Name string `json:"name,omitempty"`
+		Oidc struct {
+			Issuer       string   `json:"issuer,omitempty"`
+			ClientId     string   `json:"client_id,omitempty"`
+			ClientSecret string   `json:"client_secret,omitempty"`
+			GroupClaim   string   `json:"group_claim,omitempty"`
+			Scopes       []string `json:"scopes,omitempty"`
+			Enable       bool     `json:"enable,omitempty"`
+			DefaultRole  string   `json:"default_role,omitempty"`
+			RoleGroups   struct {
+				Role   string     `json:"role,omitempty"`
+				Groups [][]string `json:"groups,omitempty"`
+			} `json:"role_groups,omitempty"`
+			GroupMappedRoles GroupMappedRolesStruct `json:"group_mapped_roles,omitempty"`
+		} `json:"oidc,omitempty"`
+	} `json:"config,omitempty"`
+}
+
+type GroupMappedRolesStruct struct {
+	Group       string `json:"group,omitempty"`
+	GlobalRole  string `json:"global_role,omitempty"`
+	RoleDomains struct {
+		Role    string     `json:"role"` //named role_domain in rest of the package due to duplicate key name
+		Domains [][]string `json:"domains"`
+	} `json:"role_domains"`
+}

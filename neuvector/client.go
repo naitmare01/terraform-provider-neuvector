@@ -193,3 +193,52 @@ func EulaBody(d *schema.ResourceData) EulaPost {
 	body.Eula.Accepted = d.Get("accepted").(bool)
 	return body
 }
+
+func OIDCBody(d *schema.ResourceData) OIDCPost {
+	body := OIDCPost{}
+	groupmappedrolesstruct := GroupMappedRolesStruct{}
+	body.Config.Name = d.Get("name").(string)
+	body.Config.Oidc.Issuer = d.Get("issuer").(string)
+	body.Config.Oidc.ClientId = d.Get("client_id").(string)
+	body.Config.Oidc.ClientSecret = d.Get("client_secret").(string)
+	body.Config.Oidc.GroupClaim = d.Get("group_claim").(string)
+
+	scopes := d.Get("scopes").([]interface{})
+	if len(scopes) > 0 {
+		for _, scope := range scopes {
+			body.Config.Oidc.Scopes = append(body.Config.Oidc.Scopes, scope.(string))
+		}
+	}
+
+	body.Config.Oidc.Enable = d.Get("enable").(bool)
+	body.Config.Oidc.DefaultRole = d.Get("default_role").(string)
+	body.Config.Oidc.RoleGroups.Role = d.Get("role").(string)
+
+	roleGroups, roleGroupsExist := d.GetOk("groups")
+	if roleGroupsExist {
+		for _, rolegroup := range roleGroups.([]interface{}) {
+			for _, group := range rolegroup.([]interface{}) {
+				body.Config.Oidc.RoleGroups.Groups = append(body.Config.Oidc.RoleGroups.Groups, []string{group.(string)})
+			}
+		}
+	}
+
+	groupmappedrolesstruct.Group = d.Get("group").(string)
+	groupmappedrolesstruct.GlobalRole = d.Get("global_role").(string)
+	groupmappedrolesstruct.RoleDomains.Role = d.Get("role_domain").(string)
+
+	domains, domainsExist := d.GetOk("domains")
+
+	if domainsExist {
+		for _, domainname := range domains.([]interface{}) {
+			for _, domain := range domainname.([]interface{}) {
+				groupmappedrolesstruct.RoleDomains.Domains = append(groupmappedrolesstruct.RoleDomains.Domains, []string{domain.(string)})
+
+			}
+		}
+	}
+
+	body.Config.Oidc.GroupMappedRoles = groupmappedrolesstruct
+
+	return body
+}
